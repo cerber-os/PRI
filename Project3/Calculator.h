@@ -43,7 +43,8 @@ enum {  CALC_SUCCESS, CALC_OOM,
         CALC_ERR_RPN_POW_DOMAIN,
         CALC_ERR_RPN_PDW_RANGE,
         CALC_ERR_RPN_OPER_UNDEF,
-        CALC_ERR_RPN_NODE_UNDEF
+        CALC_ERR_RPN_NODE_UNDEF,
+	CALC_ERR_RPN_STACK_LEFT
 };
 
 /**********************************
@@ -57,9 +58,9 @@ int calculateFunction( char* str, double parameter, double *result );
 
 int strToInfixNodes( char *input, Infix_Node *nodes );
 int convertAndValidateInfixNodes( Infix_Node *nodes );
-int infixNodesToRPNNodes(Infix_Node *input, RPN_Node *output);
-int calculateRPNNodes(RPN_Node *nodes, double *result);
+int infixNodesToRPNNodes( Infix_Node *input, RPN_Node *output );
+int calculateRPNNodes( RPN_Node *nodes, double *result );
 
-int calculateExpression(char* input);
+int calculateExpression( char* input );
 
 #endif //PROJEKT3_CALCULATOR_H

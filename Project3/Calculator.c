@@ -125,7 +125,8 @@ void convertSymbolsInInfix( Infix_Node *nodes )
         nodes[0].type = DELETED;
     }
     for(int i = 1; nodes[i].type != EMPTY; i++)
-        if(nodes[i].type == OPERATOR && nodes[i].field.chr == '-' && nodes[i+1].type == NUMBER && nodes[i-1].type != NUMBER)
+        if( nodes[i].type == OPERATOR && nodes[i].field.chr == '-' && nodes[i+1].type == NUMBER && \
+            ( nodes[i-1].type == EQUALS || nodes[i-1].type == OPERATOR ) )
         {                                                                           // "-" not between two number
             nodes[i+1].field.number *= -1;
             nodes[i].type = DELETED;
@@ -476,8 +477,15 @@ int calculateRPNNodes( RPN_Node *nodes, double *result )
                 err = CALC_ERR_RPN_NODE_UNDEF;                                  // Even worse: undefined node!
         }
 
-    if( !err )
-        err = popNumberFromStack( stack, result );                              // Get result from stack
+    if( !err ) 
+    {
+        if( nodes[0].type == EMPTY )                                            // If input is empty just return 0
+            result = 0;
+        else
+            err = popNumberFromStack( stack, result );                          // Get result from stack
+    }
+    if( !err && stack->top != 0 )                                               // Stack is not empty
+        err = CALC_ERR_RPN_STACK_LEFT;
     deleteStack( stack );                                                       // Delete stack
     return err;
 }
